@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosplay Community</title>
+    <title>Cos O Data</title>
     <style>
         body {
             font-family: 'Helvetica', Arial, sans-serif;
@@ -28,10 +28,12 @@
             color: white;
             font-size: 24px;
             font-weight: bold;
+            cursor: pointer;
         }
         header .search-bar {
             flex: 1;
             margin: 0 20px;
+            position: relative;
         }
         header .search-bar input {
             width: 100%;
@@ -50,6 +52,7 @@
             border-radius: 50%;
             margin-left: 10px;
             border: 2px solid #fff;
+            cursor: pointer;
         }
         .login-btn {
             background: #ff3385;
@@ -62,6 +65,58 @@
         }
         .login-btn:hover {
             background: #ff66b3;
+        }
+        .notification-bell {
+            position: relative;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .notification-bell img {
+            width: 24px;
+            height: 24px;
+        }
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3385;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: #fff0f5;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .notification-dropdown h3 {
+            color: #ff3385;
+            padding: 10px;
+            margin: 0;
+            border-bottom: 1px solid #ffccdd;
+        }
+        .notification-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notification-dropdown li {
+            padding: 10px;
+            border-bottom: 1px solid #ffccdd;
+            color: #ff66b3;
+            cursor: pointer;
+        }
+        .notification-dropdown li:hover {
+            background: #ffe6f2;
         }
 
         .main-container {
@@ -84,12 +139,16 @@
             padding: 0;
         }
         .sidebar-left ul li {
+            margin: 5px 0;
             padding: 10px;
+            background: #ffe6f2;
+            border-radius: 5px;
+            text-align: center;
             cursor: pointer;
             transition: background 0.2s ease;
         }
         .sidebar-left ul li:hover {
-            background: #ffe6f2;
+            background: #ffccdd;
         }
         .content {
             width: 50%;
@@ -176,6 +235,23 @@
         .post-header .username {
             font-weight: bold;
             color: #ff3385;
+            cursor: pointer;
+        }
+        .post-header .follow-btn {
+            margin-left: auto;
+            background: #ff66b3;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .post-header .follow-btn.followed {
+            background: #ccc;
+        }
+        .post-header .follow-btn:hover {
+            background: #ff3385;
         }
         .post-content img {
             max-width: 100%;
@@ -245,6 +321,37 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        .leaderboard {
+            margin-top: 20px;
+        }
+        .leaderboard h3 {
+            color: #ff3385;
+            margin-bottom: 10px;
+        }
+        .leaderboard ul {
+            list-style: none;
+            padding: 0;
+        }
+        .leaderboard li {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #ffccdd;
+        }
+        .leaderboard li img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .leaderboard li span {
+            flex: 1;
+            color: #ff66b3;
+        }
+        .leaderboard li .followers-count {
+            font-weight: bold;
+            color: #ff3385;
+        }
 
         /* Modal Đăng nhập */
         .modal {
@@ -269,7 +376,7 @@
             color: #ff66b3;
             text-align: center;
         }
-        .modal-content input {
+        .modal-content input, .modal-content textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -322,31 +429,191 @@
         .notification-content button:hover {
             transform: scale(1.05);
         }
+
+        /* Modal Tìm kiếm */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .search-modal-content {
+            background: #fff0f5;
+            padding: 20px;
+            border-radius: 10px;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .search-modal-content h2 {
+            color: #ff66b3;
+            text-align: center;
+        }
+        .search-modal-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        .search-modal-content li {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ffccdd;
+            cursor: pointer;
+        }
+        .search-modal-content li img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .search-modal-content li span {
+            color: #ff66b3;
+        }
+
+        /* Trang Profile */
+        .profile-page {
+            display: none;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 20px;
+            background: #fff0f5;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header {
+            position: relative;
+            height: 200px;
+            background: #ff99cc;
+            border-radius: 10px 10px 0 0;
+        }
+        .profile-header img.cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+        .profile-header img.avatar {
+            position: absolute;
+            bottom: -50px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+        .profile-info {
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .profile-info h2 {
+            color: #ff3385;
+            margin: 0 0 10px;
+        }
+        .profile-info p {
+            color: #ff66b3;
+            margin: 5px 0;
+        }
+        .profile-info .edit-btn {
+            background: linear-gradient(45deg, #ff66b3, #ff3385);
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .profile-posts {
+            padding: 20px;
+        }
+        .profile-posts h3 {
+            color: #ff3385;
+            margin-bottom: 10px;
+        }
+
+        /* Trang Sự kiện */
+        .events-page {
+            display: none;
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 20px;
+            display: flex;
+        }
+        .events-content {
+            width: 75%;
+            padding: 0 20px;
+        }
+        .event {
+            background: #fff0f5;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .event-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .event-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #ff99cc;
+        }
+        .event-header .event-title {
+            font-weight: bold;
+            color: #ff3385;
+        }
+        .event-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .event-details {
+            margin-top: 10px;
+            color: #ff66b3;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">Cosplay Community</div>
+        <div class="logo" onclick="showMainPage()">Cos O Data</div>
         <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm...">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="search()">
         </div>
         <div class="user-area">
             <button class="login-btn" onclick="showLoginModal()">Đăng nhập</button>
-            <img id="userAvatar" src="" alt="Avatar" style="display: none;">
+            <img id="userAvatar" src="" alt="Avatar" style="display: none;" onclick="showProfile(username)">
+            <div class="notification-bell" onclick="toggleNotifications()">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828765.png" alt="Bell">
+                <span id="notificationBadge" class="badge" style="display: none;">0</span>
+            </div>
+        </div>
+        <div class="notification-dropdown" id="notificationDropdown">
+            <h3>Thông báo</h3>
+            <ul id="notificationDropdownList"></ul>
         </div>
     </header>
 
-    <div class="main-container">
+    <div class="main-container" id="mainContainer">
         <div class="sidebar-left">
             <ul>
-                <li>Trang chủ</li>
-                <li>Hồ sơ</li>
-                <li>Bạn bè</li>
-                <li>Nhóm</li>
+                <li onclick="showMainPage()">Trang chủ</li>
+                <li onclick="showProfile(username)">Hồ sơ</li>
+                <li onclick="showFriends()">Bạn bè</li>
+                <li onclick="showGroups()">Nhóm</li>
+                <li onclick="showEventsPage()">Sự kiện</li>
             </ul>
         </div>
 
-        <div class="content">
+        <div class="content" id="content">
             <div class="post-form">
                 <textarea id="postText" rows="3" placeholder="Bạn đang nghĩ gì về cosplay?"></textarea>
                 <div class="file-upload">
@@ -359,7 +626,50 @@
         </div>
 
         <div class="sidebar-right">
-            <p>Quảng cáo hoặc sự kiện cosplay</p>
+            <div class="leaderboard">
+                <h3>Bảng xếp hạng</h3>
+                <ul id="leaderboardList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-page" id="profilePage">
+        <div class="profile-header">
+            <img id="profileCover" class="cover" src="https://via.placeholder.com/800x200/ff99cc/ffffff?text=Cover+Photo" alt="Cover">
+            <img id="profileAvatar" class="avatar" src="https://via.placeholder.com/100" alt="Avatar">
+        </div>
+        <div class="profile-info">
+            <h2 id="profileUsername"></h2>
+            <p id="profileBio"></p>
+            <p id="profileEmail"></p>
+            <button class="edit-btn" onclick="showEditProfileModal()">Chỉnh sửa hồ sơ</button>
+        </div>
+        <div class="profile-posts">
+            <h3>Bài đăng</h3>
+            <div id="profilePosts"></div>
+        </div>
+    </div>
+
+    <div class="events-page" id="eventsPage">
+        <div class="sidebar-left">
+            <ul>
+                <li onclick="showMainPage()">Trang chủ</li>
+                <li onclick="showProfile(username)">Hồ sơ</li>
+                <li onclick="showFriends()">Bạn bè</li>
+                <li onclick="showGroups()">Nhóm</li>
+                <li onclick="showEventsPage()">Sự kiện</li>
+            </ul>
+        </div>
+
+        <div class="events-content">
+            <div id="eventsList"></div>
+        </div>
+
+        <div class="sidebar-right">
+            <div class="leaderboard">
+                <h3>Bảng xếp hạng</h3>
+                <ul id="leaderboardListEvents"></ul>
+            </div>
         </div>
     </div>
 
@@ -381,11 +691,41 @@
         </div>
     </div>
 
+    <!-- Modal Tìm kiếm -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-modal-content">
+            <h2>Kết quả tìm kiếm</h2>
+            <ul id="searchResults"></ul>
+        </div>
+    </div>
+
+    <!-- Modal Chỉnh sửa hồ sơ -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <h2>Chỉnh sửa hồ sơ</h2>
+            <input type="text" id="editUsername" placeholder="Tên người dùng">
+            <textarea id="editBio" placeholder="Mô tả"></textarea>
+            <input type="email" id="editEmail" placeholder="Email">
+            <button onclick="saveProfile()">Lưu</button>
+        </div>
+    </div>
+
     <script>
         let isLoggedIn = false;
         let currentAvatar = "https://via.placeholder.com/40";
         let username = "Cosplayer";
         let postIdCounter = 0;
+        let allPosts = [];
+        let notifications = [];
+
+        // Danh sách người dùng (bao gồm người dùng ảo và người dùng hiện tại)
+        let users = [
+            { username: "SakuraCos", avatar: "https://via.placeholder.com/40/ff99cc/ffffff?text=S", followers: [], following: [], bio: "Yêu thích cosplay Sakura!", email: "sakura@example.com", cover: "https://via.placeholder.com/800x200/ff99cc/ffffff?text=Sakura+Cover" },
+            { username: "NarutoFan", avatar: "https://via.placeholder.com/40/ff66b3/ffffff?text=N", followers: [], following: [], bio: "Fan cứng của Naruto!", email: "naruto@example.com", cover: "https://via.placeholder.com/800x200/ff66b3/ffffff?text=Naruto+Cover" },
+            { username: "LoliChan", avatar: "https://via.placeholder.com/40/ff3385/ffffff?text=L", followers: [], following: [], bio: "Thích cosplay các nhân vật dễ thương!", email: "loli@example.com", cover: "https://via.placeholder.com/800x200/ff3385/ffffff?text=Loli+Cover" },
+            { username: "GamerCos", avatar: "https://via.placeholder.com/40/ffe6f2/000000?text=G", followers: [], following: [], bio: "Cosplay nhân vật game!", email: "gamer@example.com", cover: "https://via.placeholder.com/800x200/ffe6f2/000000?text=Gamer+Cover" },
+            { username: "MikuLover", avatar: "https://via.placeholder.com/40/ffccdd/ffffff?text=M", followers: [], following: [], bio: "Fan của Hatsune Miku!", email: "miku@example.com", cover: "https://via.placeholder.com/800x200/ffccdd/ffffff?text=Miku+Cover" }
+        ];
 
         function showLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
@@ -420,10 +760,246 @@
                 document.getElementById('userAvatar').style.display = 'block';
                 document.querySelector('.login-btn').style.display = 'none';
                 hideLoginModal();
+
+                // Thêm người dùng hiện tại vào danh sách nếu chưa tồn tại
+                if (!users.find(user => user.username === username)) {
+                    users.push({ username: username, avatar: currentAvatar, followers: [], following: [], bio: "", email: "", cover: "https://via.placeholder.com/800x200/ff99cc/ffffff?text=Default+Cover" });
+                }
+                updateLeaderboard();
+                updateNotifications();
                 alert(`Chào mừng ${username}!`);
             } else {
                 alert('Vui lòng nhập đầy đủ thông tin!');
             }
+        }
+
+        function followUser(targetUsername) {
+            if (!isLoggedIn) {
+                showNotificationModal();
+                return;
+            }
+
+            const targetUser = users.find(user => user.username === targetUsername);
+            const currentUser = users.find(user => user.username === username);
+            if (targetUser && targetUser.username !== username) {
+                if (!targetUser.followers.includes(username)) {
+                    targetUser.followers.push(username);
+                    currentUser.following.push(targetUsername);
+                } else {
+                    targetUser.followers = targetUser.followers.filter(follower => follower !== username);
+                    currentUser.following = currentUser.following.filter(following => following !== targetUsername);
+                }
+                updateLeaderboard();
+                updateNotifications();
+            }
+        }
+
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            const leaderboardListEvents = document.getElementById('leaderboardListEvents');
+            leaderboardList.innerHTML = '';
+            leaderboardListEvents.innerHTML = '';
+
+            // Sắp xếp người dùng theo số lượng người theo dõi (giảm dần)
+            const sortedUsers = [...users].sort((a, b) => b.followers.length - a.followers.length);
+
+            // Hiển thị tối đa 5 người dùng hàng đầu
+            sortedUsers.slice(0, 5).forEach(user => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <img src="${user.avatar}" alt="${user.username}">
+                    <span>${user.username}</span>
+                    <span class="followers-count">${user.followers.length}</span>
+                `;
+                leaderboardList.appendChild(li);
+                leaderboardListEvents.appendChild(li.cloneNode(true));
+            });
+        }
+
+        function updateNotifications() {
+            const notificationDropdownList = document.getElementById('notificationDropdownList');
+            notificationDropdownList.innerHTML = '';
+
+            if (!isLoggedIn) return;
+
+            const currentUser = users.find(user => user.username === username);
+            const following = currentUser.following || [];
+
+            // Lấy bài đăng mới từ những người mà người dùng đang theo dõi
+            const recentPosts = allPosts
+                .filter(post => following.includes(post.username))
+                .slice(-5); // Lấy tối đa 5 bài đăng mới nhất
+
+            notifications = recentPosts;
+            const badge = document.getElementById('notificationBadge');
+            badge.textContent = notifications.length;
+            badge.style.display = notifications.length > 0 ? 'block' : 'none';
+
+            recentPosts.forEach(post => {
+                const li = document.createElement('li');
+                li.textContent = `${post.username} vừa đăng: ${post.text.substring(0, 30)}${post.text.length > 30 ? '...' : ''}`;
+                li.onclick = () => showProfile(post.username);
+                notificationDropdownList.appendChild(li);
+            });
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function search() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+
+            if (query.length < 2) {
+                document.getElementById('searchModal').style.display = 'none';
+                return;
+            }
+
+            // Tìm kiếm người dùng
+            const matchingUsers = users.filter(user => user.username.toLowerCase().includes(query));
+            matchingUsers.forEach(user => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <img src="${user.avatar}" alt="${user.username}">
+                    <span>${user.username}</span>
+                `;
+                li.onclick = () => showProfile(user.username);
+                searchResults.appendChild(li);
+            });
+
+            // Tìm kiếm bài đăng
+            const matchingPosts = allPosts.filter(post => post.text.toLowerCase().includes(query));
+            matchingPosts.forEach(post => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <img src="${post.avatar}" alt="${post.username}">
+                    <span>${post.username}: ${post.text.substring(0, 50)}${post.text.length > 50 ? '...' : ''}</span>
+                `;
+                li.onclick = () => showProfile(post.username);
+                searchResults.appendChild(li);
+            });
+
+            document.getElementById('searchModal').style.display = searchResults.children.length > 0 ? 'flex' : 'none';
+        }
+
+        function showProfile(targetUsername) {
+            if (!targetUsername) return;
+
+            const user = users.find(u => u.username === targetUsername);
+            if (!user) return;
+
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('eventsPage').style.display = 'none';
+            const profilePage = document.getElementById('profilePage');
+            profilePage.style.display = 'block';
+
+            document.getElementById('profileUsername').textContent = user.username;
+            document.getElementById('profileAvatar').src = user.avatar;
+            document.getElementById('profileCover').src = user.cover;
+            document.getElementById('profileBio').textContent = user.bio || "Chưa có mô tả.";
+            document.getElementById('profileEmail').textContent = user.email || "Chưa có email.";
+
+            const profilePosts = document.getElementById('profilePosts');
+            profilePosts.innerHTML = '';
+            const userPosts = allPosts.filter(post => post.username === targetUsername);
+            userPosts.forEach(post => {
+                const postDiv = createPostElement(post);
+                profilePosts.appendChild(postDiv);
+            });
+        }
+
+        function showEditProfileModal() {
+            if (!isLoggedIn || username !== document.getElementById('profileUsername').textContent) {
+                alert('Bạn chỉ có thể chỉnh sửa hồ sơ của mình!');
+                return;
+            }
+
+            const user = users.find(u => u.username === username);
+            document.getElementById('editUsername').value = user.username;
+            document.getElementById('editBio').value = user.bio || "";
+            document.getElementById('editEmail').value = user.email || "";
+            document.getElementById('editProfileModal').style.display = 'flex';
+        }
+
+        function saveProfile() {
+            const newUsername = document.getElementById('editUsername').value;
+            const newBio = document.getElementById('editBio').value;
+            const newEmail = document.getElementById('editEmail').value;
+
+            if (!newUsername) {
+                alert('Tên người dùng không được để trống!');
+                return;
+            }
+
+            // Kiểm tra xem tên người dùng mới có trùng với người dùng khác không
+            if (newUsername !== username && users.some(user => user.username === newUsername)) {
+                alert('Tên người dùng đã tồn tại! Vui lòng chọn tên khác.');
+                return;
+            }
+
+            const user = users.find(u => u.username === username);
+            const oldUsername = username;
+
+            // Cập nhật thông tin người dùng
+            user.username = newUsername;
+            user.bio = newBio;
+            user.email = newEmail;
+
+            // Cập nhật username toàn cục
+            username = newUsername;
+
+            // Cập nhật các bài đăng, followers, following
+            allPosts.forEach(post => {
+                if (post.username === oldUsername) post.username = newUsername;
+            });
+            users.forEach(u => {
+                u.followers = u.followers.map(follower => follower === oldUsername ? newUsername : follower);
+                u.following = u.following.map(following => following === oldUsername ? newUsername : following);
+            });
+
+            document.getElementById('editProfileModal').style.display = 'none';
+            showProfile(username);
+            updateLeaderboard();
+            updateNotifications();
+
+            // Cập nhật lại giao diện chính nếu đang ở trang chính
+            if (document.getElementById('mainContainer').style.display !== 'none') {
+                const postsDiv = document.getElementById('posts');
+                postsDiv.innerHTML = '';
+                allPosts.forEach(post => {
+                    const postDiv = createPostElement(post);
+                    postsDiv.appendChild(postDiv);
+                });
+            }
+        }
+
+        function showMainPage() {
+            document.getElementById('mainContainer').style.display = 'flex';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('eventsPage').style.display = 'none';
+            document.getElementById('searchModal').style.display = 'none';
+            document.getElementById('editProfileModal').style.display = 'none';
+            document.getElementById('notificationDropdown').style.display = 'none';
+        }
+
+        function showFriends() {
+            alert('Chức năng Bạn bè đang được phát triển!');
+        }
+
+        function showGroups() {
+            alert('Chức năng Nhóm đang được phát triển!');
+        }
+
+        function showEventsPage() {
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('eventsPage').style.display = 'flex';
+            document.getElementById('searchModal').style.display = 'none';
+            document.getElementById('editProfileModal').style.display = 'none';
+            document.getElementById('notificationDropdown').style.display = 'none';
         }
 
         function createPostElement(postData) {
@@ -438,8 +1014,19 @@
             const usernameSpan = document.createElement('span');
             usernameSpan.className = 'username';
             usernameSpan.textContent = postData.username;
+            usernameSpan.onclick = () => showProfile(postData.username);
+            const followButton = document.createElement('button');
+            followButton.className = 'follow-btn';
+            followButton.textContent = 'Theo dõi';
+            followButton.onclick = function() {
+                followUser(postData.username);
+                const targetUser = users.find(user => user.username === postData.username);
+                followButton.classList.toggle('followed', targetUser.followers.includes(username));
+                followButton.textContent = targetUser.followers.includes(username) ? 'Đã theo dõi' : 'Theo dõi';
+            };
             postHeader.appendChild(avatarImg);
             postHeader.appendChild(usernameSpan);
+            postHeader.appendChild(followButton);
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'post-content';
@@ -543,6 +1130,8 @@
                 };
                 const postDiv = createPostElement(postData);
                 postsDiv.insertBefore(postDiv, postsDiv.firstChild);
+                allPosts.push(postData);
+                updateNotifications();
 
                 document.getElementById('postText').value = '';
                 imageInput.value = '';
@@ -551,8 +1140,49 @@
             }
         }
 
-        // Tạo bài đăng ảo
-        function createSamplePosts() {
+        function createEventElement(eventData) {
+            const eventDiv = document.createElement('div');
+            eventDiv.className = 'event';
+
+            const eventHeader = document.createElement('div');
+            eventHeader.className = 'event-header';
+            const avatarImg = document.createElement('img');
+            avatarImg.src = eventData.avatar;
+            const titleSpan = document.createElement('span');
+            titleSpan.className = 'event-title';
+            titleSpan.textContent = eventData.title;
+            eventHeader.appendChild(avatarImg);
+            eventHeader.appendChild(titleSpan);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'event-content';
+            if (eventData.description) {
+                const descP = document.createElement('p');
+                descP.textContent = eventData.description;
+                contentDiv.appendChild(descP);
+            }
+            if (eventData.image) {
+                const img = document.createElement('img');
+                img.src = eventData.image;
+                contentDiv.appendChild(img);
+            }
+
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'event-details';
+            detailsDiv.innerHTML = `
+                <p>Thời gian: ${eventData.time}</p>
+                <p>Địa điểm: ${eventData.location}</p>
+            `;
+
+            eventDiv.appendChild(eventHeader);
+            eventDiv.appendChild(contentDiv);
+            eventDiv.appendChild(detailsDiv);
+
+            return eventDiv;
+        }
+
+        // Tạo bài đăng ảo và sự kiện ảo
+        function createSampleData() {
             const samplePosts = [
                 {
                     username: "SakuraCos",
@@ -591,14 +1221,63 @@
                 }
             ];
 
+            const sampleEvents = [
+                {
+                    title: "Hội chợ Cosplay 2025",
+                    avatar: "https://via.placeholder.com/40/ff99cc/ffffff?text=E1",
+                    description: "Hội chợ cosplay lớn nhất năm 2025 với nhiều hoạt động thú vị như thi cosplay, giao lưu với cosplayer nổi tiếng, và các gian hàng phụ kiện!",
+                    image: "https://via.placeholder.com/500x300/ff99cc/ffffff?text=Cosplay+Event",
+                    time: "10:00, 15/04/2025",
+                    location: "Trung tâm Hội nghị Quốc gia, Hà Nội"
+                },
+                {
+                    title: "Anime Festival 2025",
+                    avatar: "https://via.placeholder.com/40/ff66b3/ffffff?text=E2",
+                    description: "Lễ hội anime với các hoạt động cosplay, triển lãm tranh, và biểu diễn âm nhạc từ các nhóm nhạc anime nổi tiếng.",
+                    image: "https://via.placeholder.com/500x300/ff66b3/ffffff?text=Anime+Festival",
+                    time: "09:00, 20/05/2025",
+                    location: "Nhà Văn hóa Thanh niên, TP.HCM"
+                },
+                {
+                    title: "Cosplay Night 2025",
+                    avatar: "https://via.placeholder.com/40/ff3385/ffffff?text=E3",
+                    description: "Buổi tối cosplay với chủ đề 'Đêm huyền bí', nơi bạn có thể hóa trang thành các nhân vật ma thuật và tham gia các trò chơi thú vị.",
+                    image: "https://via.placeholder.com/500x300/ff3385/ffffff?text=Cosplay+Night",
+                    time: "18:00, 31/10/2025",
+                    location: "Công viên Tao Đàn, TP.HCM"
+                }
+            ];
+
+            // Tạo dữ liệu người theo dõi ảo
+            users[0].followers = ["NarutoFan", "LoliChan", "GamerCos", "MikuLover"];
+            users[0].following = ["NarutoFan", "LoliChan"];
+            users[1].followers = ["SakuraCos", "LoliChan"];
+            users[1].following = ["SakuraCos", "MikuLover"];
+            users[2].followers = ["SakuraCos", "NarutoFan", "GamerCos"];
+            users[2].following = ["SakuraCos", "GamerCos"];
+            users[3].followers = ["MikuLover"];
+            users[3].following = ["LoliChan"];
+            users[4].followers = ["SakuraCos", "NarutoFan", "LoliChan", "GamerCos"];
+            users[4].following = ["NarutoFan"];
+
             const postsDiv = document.getElementById('posts');
             samplePosts.forEach(post => {
                 const postDiv = createPostElement(post);
                 postsDiv.appendChild(postDiv);
+                allPosts.push(post);
             });
+
+            const eventsList = document.getElementById('eventsList');
+            sampleEvents.forEach(event => {
+                const eventDiv = createEventElement(event);
+                eventsList.appendChild(eventDiv);
+            });
+
+            updateLeaderboard();
+            updateNotifications();
         }
 
-        window.onload = createSamplePosts;
+        window.onload = createSampleData;
 
         document.getElementById('loginModal').addEventListener('click', function(e) {
             if (e.target === this) hideLoginModal();
@@ -606,6 +1285,22 @@
 
         document.getElementById('notificationModal').addEventListener('click', function(e) {
             if (e.target === this) hideNotificationModal();
+        });
+
+        document.getElementById('searchModal').addEventListener('click', function(e) {
+            if (e.target === this) document.getElementById('searchModal').style.display = 'none';
+        });
+
+        document.getElementById('editProfileModal').addEventListener('click', function(e) {
+            if (e.target === this) document.getElementById('editProfileModal').style.display = 'none';
+        });
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const bell = document.querySelector('.notification-bell');
+            if (!bell.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
         });
     </script>
 </body>
